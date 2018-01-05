@@ -1,9 +1,10 @@
 const students = $('.student-item');
 
 function init() {
-$("ul li:gt(9)").hide(); //Hide all students after #10
-};
+	$("ul li:gt(9)").hide(); //Hide all students after #10
+}
 init();
+
 //Add pagination links
 $('.page').append(`<div class="pagination"><ul></ul></div>`); //Create div
 
@@ -18,8 +19,8 @@ students.each(function(){
 			<li class="pagBtn">
 	       	 <a class="active" href="#">${pagNum}</a>
 	        </li>
-		`)}
-});
+		`)};
+	});
 
 $('.pagBtn').children().toggleClass('active', false);
 $('.pagination ul a:eq(0)').toggleClass('active', true);
@@ -35,7 +36,7 @@ $('.pagBtn').on("click", function() {
 		} else {
 			$(this).hide();
 		}
-	})
+	});
 });
 
 //Add search box
@@ -48,19 +49,19 @@ $('.page-header').append(`
 //Gather input value
 $('.student-search input').keyup(function() {
 	let input = $(this).val();
-	//reset page if input is deleted
-	console.log(input.length);
-	if(input.length < 1) {
-		$(".student-list li:gt(9)").hide();
-	}
 	//compare students to input
 	$(students).each(function() {
+		//reset page if input is deleted
+		if(input.length < 1) {
+			init();
+			$('.pagination li').show();
+		}
 		if($(this).text().search(new RegExp(input, "i")) < 0) {
 			$(this).hide();
 		} else {
 			$(this).show();
 		}
-	}) //End search loop
+	}); //End search loop
 
 	//Alert if no matches exist
 	if ($('.student-list').children(':visible').length < 1) {
@@ -69,7 +70,7 @@ $('.student-search input').keyup(function() {
 		`).css("color", "red");
 	} else {
 		$('.alert').remove();
-	}; //End alert
+	} //End alert
 }); //End keyup 
 
 
