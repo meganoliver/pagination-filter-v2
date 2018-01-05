@@ -1,42 +1,11 @@
 const students = $('.student-item');
-let names = [];
 
-
-$('.student-details h3').each(function() {
-	names.push($(this).text());
-}) //end loop creating names array
-
-//Add search box
-$('.page-header').append(`
-	<div class="student-search">
-    	<input placeholder="Search for students...">
-        <button>Search</button>
-    </div>`);
-
-//Gather input value
-$('.student-search button').click(function() {
-	const input = $('.student-search input').val().toLowerCase(); //Gather search input
-	console.log(input);
-	console.log(names);
-	names.each(function() {
-		if($(this) !== input) {
-			$(this).hide();
-		} else {
-			$(this).show();
-		}
-	})
-}); //end button click event
-
-
-
-//Hide all students after #10
-
-$("li:gt(9)").hide();
-
+function init() {
+$("ul li:gt(9)").hide(); //Hide all students after #10
+};
+init();
 //Add pagination links
-
-//Create div
-$('.page').append(`<div class="pagination"><ul></ul></div>`);
+$('.page').append(`<div class="pagination"><ul></ul></div>`); //Create div
 
 //Loop through students.
 students.each(function(){
@@ -65,10 +34,48 @@ $('.pagBtn').on("click", function() {
 			$(this).show();
 		} else {
 			$(this).hide();
-			
 		}
 	})
 });
+
+//Add search box
+$('.page-header').append(`
+	<div class="student-search">
+    	<input placeholder="Search for students...">
+        <button>Search</button>
+    </div>`);
+
+//Gather input value
+$('.student-search input').keyup(function() {
+	let input = $(this).val();
+	//reset page if input is deleted
+	console.log(input.length);
+	if(input.length < 1) {
+		$(".student-list li:gt(9)").hide();
+	}
+	//compare students to input
+	$(students).each(function() {
+		if($(this).text().search(new RegExp(input, "i")) < 0) {
+			$(this).hide();
+		} else {
+			$(this).show();
+		}
+	}) //End search loop
+
+	//Alert if no matches exist
+	if ($('.student-list').children(':visible').length < 1) {
+		$('.student-list').append(`
+			<strong class="alert">Sorry, no students match your search.</strong>
+		`).css("color", "red");
+	} else {
+		$('.alert').remove();
+	}; //End alert
+}); //End keyup 
+
+
+
+
+
 
 
 
